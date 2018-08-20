@@ -8,4 +8,8 @@ version = "1.0"
 features = ["parallel"]
 
 [dependencies]
+cast = "0.2"
 failure = "0.1"
+
+[profile.release]
+lto = true

@@ -15,6 +15,7 @@ fn main() -> io::Result<()> {
         .include("c/stubs")
         .include("c/libheif")
         .include("c/libde265")
+        .define("HAVE_LIBDE265", Some("1"))
         .define("HAVE_UNISTD_H", Some("1"))
         .define("HAVE_STDINT_H", Some("1"))
         .define("HAVE_MALLOC_H", Some("1"))

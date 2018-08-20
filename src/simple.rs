@@ -1,10 +1,15 @@
-use failure::Error;
-use raw;
 use std::ffi::CStr;
 use std::ffi::CString;
+use std::os;
 use std::os::unix::ffi::OsStrExt;
 use std::path::Path;
 use std::ptr;
+
+use cast::isize;
+use cast::usize;
+use failure::Error;
+
+use raw;
 
 pub struct Context {
     inner: *mut raw::heif_context,
@@ -18,6 +23,12 @@ pub struct ImageHandle<'c> {
 pub struct Image<'c: 'h, 'h> {
     handle: &'h mut ImageHandle<'c>,
     inner: *mut raw::heif_image,
+}
+
+pub struct Pixels<'c: 'h, 'h: 'i, 'i> {
+    image: &'i mut Image<'c, 'h>,
+    stride: usize,
+    data: *const u8,
 }
 
 impl Context {
@@ -75,6 +86,40 @@ impl<'c> ImageHandle<'c> {
             handle: self,
             inner: ptr,
         })
+    }
+}
+
+impl<'c, 'h> Image<'c, 'h> {
+    pub fn pixels<'s>(&'s mut self) -> Result<Pixels<'c, 'h, 's>, Error> {
+        let mut stride: os::raw::c_int = 0;
+
+        let ptr = unsafe {
+            raw::heif_image_get_plane_readonly(
+                self.inner,
+                raw::heif_channel_heif_channel_interleaved,
+                &mut stride,
+            )
+        };
+
+        if ptr.is_null() {
+            bail!("heif_image_get_plane_readonly failed");
+        }
+
+        Ok(Pixels {
+            image: self,
+            stride: usize(stride)?,
+            data: ptr,
+        })
+    }
+}
+
+impl<'c, 'h, 'i> Pixels<'c, 'h, 'i> {
+    pub fn get_four(&self, x: usize, y: usize) -> u32 {
+        assert_eq!(0, y);
+        // TODO: self.step
+        // TODO: width
+        // TODO: width validation
+        unsafe { *(self.data.offset(isize(x).expect("too big for isize")) as *const u32) }
     }
 }
 

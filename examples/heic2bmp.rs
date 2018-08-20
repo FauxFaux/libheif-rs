@@ -1,11 +1,13 @@
+#[macro_use]
 extern crate failure;
 extern crate libheif;
 
+use std::env;
+
 use failure::Error;
 
-#[test]
-fn create_context() -> Result<(), Error> {
-    let mut ctx = libheif::Context::from_file("road.heic")?;
+fn main() -> Result<(), Error> {
+    let mut ctx = libheif::Context::from_file(env::args_os().nth(1).ok_or_else(|| format_err!("usage: FILENAME"))?)?;
     let mut handle = ctx.get_primary_image()?;
     let mut image = handle.decode()?;
     let pixels = image.pixels()?;
