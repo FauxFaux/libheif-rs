@@ -1,8 +1,8 @@
 extern crate cast;
 #[macro_use]
 extern crate failure;
+#[macro_use]
+extern crate more_asserts;
 
 pub mod raw;
-mod simple;
-
-pub use simple::Context;
+pub mod simple;
