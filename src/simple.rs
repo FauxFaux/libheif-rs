@@ -58,8 +58,7 @@ impl Context {
 }
 
 impl<'c> ImageHandle<'c> {
-    // TODO: this 'c here probably isn't right, but typechecks
-    pub fn decode(&'c mut self) -> Result<Image, Error> {
+    pub fn decode<'s>(&'s mut self) -> Result<Image<'c, 's>, Error> {
         let mut ptr = ::std::ptr::null_mut();
 
         check_error("heif_decode_image", unsafe {
