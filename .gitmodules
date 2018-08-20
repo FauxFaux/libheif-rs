@@ -4,3 +4,6 @@
 [submodule "c/libde265"]
 	path = c/libde265
 	url = https://github.com/strukturag/libde265
+[submodule "tests/heif_conformance"]
+	path = tests/heif_conformance
+	url = https://github.com/nokiatech/heif_conformance

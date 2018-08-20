@@ -19,6 +19,7 @@ fn main() -> io::Result<()> {
         .define("HAVE_STDINT_H", Some("1"))
         .define("HAVE_MALLOC_H", Some("1"))
         .files(files)
+        .warnings(false)
         .cpp(true)
         .compile("heif-all");
 

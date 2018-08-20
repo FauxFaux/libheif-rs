@@ -3,5 +3,9 @@ name = "libheif"
 version = "0.1.0"
 authors = ["Chris West (Faux) <git@goeswhere.com>"]
 
-[build-dependencies]
-cc = "1.0"
+[build-dependencies.cc]
+version = "1.0"
+features = ["parallel"]
+
+[dependencies]
+failure = "0.1"
