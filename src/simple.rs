@@ -34,7 +34,7 @@ pub struct Plane<'c: 'h, 'h: 'i, 'i> {
 }
 
 pub struct Pixels<'c: 'h, 'h: 'i, 'i: 'p, 'p> {
-    plane: &'p mut Plane<'c, 'h, 'i>,
+    plane: &'p Plane<'c, 'h, 'i>,
     stride: usize,
     data: *const u8,
 }
@@ -175,7 +175,7 @@ impl<'c, 'h, 'i> Plane<'c, 'h, 'i> {
         self.height
     }
 
-    pub fn pixels<'s>(&'s mut self) -> Result<Pixels<'c, 'h, 'i, 's>, Error> {
+    pub fn pixels<'s>(&'s self) -> Result<Pixels<'c, 'h, 'i, 's>, Error> {
         let mut stride: os::raw::c_int = 0;
 
         let ptr = unsafe {

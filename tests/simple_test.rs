@@ -14,7 +14,7 @@ fn first_pixel() -> Result<(), Error> {
     let mut handle = ctx.get_primary_image()?;
     {
         let mut image = handle.decode(DecoderSettings::interleaved_rgb())?;
-        let mut plane = image.plane(Channel::Interleaved)?;
+        let plane = image.plane(Channel::Interleaved)?;
         let pixels = plane.pixels()?;
         let row = pixels.get_row(0);
 
@@ -28,7 +28,7 @@ fn first_pixel() -> Result<(), Error> {
             chroma: Chroma::C420,
             colour_space: ColourSpace::YCbCr,
         })?;
-        let mut plane = image.plane(Channel::Y)?;
+        let plane = image.plane(Channel::Y)?;
         let pixels = plane.pixels()?;
         let row = pixels.get_row(0);
 
